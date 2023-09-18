@@ -1,0 +1,11 @@
+{
+    "mcu": "stm32f4",
+    "product": "WeAct Studio F411CEU6 v3.1",
+    "variants": {
+        "DP": "Double-precision float",
+        "DP_THREAD": "Double precision float + Threads",
+        "NETWORK": "Wiznet 5200 Driver",
+        "THREAD": "Threading"
+    },
+    "vendor": "WeAct Studio"
+}
