@@ -1,6 +1,7 @@
 # STM32F411CEU6_BlackPill_Micropython
-This port gives you a py board experience using the BlackPill created by WeAct Studio.
+This port gives you a py-board-like experience using the BlackPill created by WeAct Studio.
 There are 2 versions of Firmware provided, one for the 8MB version and one for the regular version. Both can be found in the `firmware` folder.
+The 8MB version lets you use the 8MB spi storage to store your codes while the regular version offers 155KB flash storage for your codes.
 ## How to build
 First of all, you have to have a linux enviroment and get the compilers.
 ```shell
