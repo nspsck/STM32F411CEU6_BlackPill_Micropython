@@ -3,18 +3,20 @@
 
 // Disabled network realted functions to save space
 // Note STM32F411-series does not have ETH-interface
-#define MICROPY_PY_SOCKET                       (0)
-#define MICROPY_PY_NETWORK                      (0)
-#define MICROPY_PY_ONEWIRE                      (0)
+// #define MICROPY_PY_SOCKET                       (0)
+// #define MICROPY_PY_NETWORK                      (0)
+// #define MICROPY_PY_ONEWIRE                      (0)
 
 // Enabling hardware related features
 // For more details check mpconfigboard_common.h
+#define MICROPY_HW_HAS_SWITCH       (1)
+#define MICROPY_HW_HAS_FLASH        (1)
+#define MICROPY_HW_HAS_MMA7660      (0)
+#define MICROPY_HW_HAS_LCD          (0)
 #define MICROPY_HW_ENABLE_RTC       (1)
 #define MICROPY_HW_ENABLE_ADC       (1)
 #define MICROPY_HW_ENABLE_USB       (1)
 #define MICROPY_HW_ENABLE_SERVO     (1) // PA0-PA3, you might want to disable USART2
-#define MICROPY_HW_HAS_SWITCH       (1)
-#define MICROPY_HW_HAS_FLASH        (1)
 #define MICROPY_HW_ENABLE_TIMER     (1)
 #define MICROPY_HW_ENABLE_INTERNAL_FLASH_STORAGE (0)
 
@@ -25,7 +27,7 @@
 #define MICROPY_HW_CLK_PLLQ (4)
 #define MICROPY_HW_CLK_LAST_FREQ (1)
 
-// Pyboard lite has an optional 32kHz crystal
+// BlackPill has an optional 32kHz crystal
 #define MICROPY_HW_RTC_USE_LSE      (1)
 #define MICROPY_HW_RTC_USE_US       (0)
 #define MICROPY_HW_RTC_USE_CALOUT   (1)
@@ -58,11 +60,11 @@ extern struct _spi_bdev_t spi_bdev;
 #define MICROPY_HW_UART1_TX         (pin_A9) // Valid: PA9, PA15, PB6
 #define MICROPY_HW_UART1_RX         (pin_A10) // Valid: PA10, PB3, PB7
 // #define MICROPY_HW_UART2_NAME       "USART2"
-#define MICROPY_HW_UART2_TX         (pin_A2) // Fixed
-#define MICROPY_HW_UART2_RX         (pin_A3) // Fixed
+#define MICROPY_HW_UART2_TX         (pin_A2) // Valid: PA2
+#define MICROPY_HW_UART2_RX         (pin_A3) // Valid: PA3
 // #define MICROPY_HW_UART6_NAME       "USART6"
-#define MICROPY_HW_UART6_TX         (pin_A11) // Fixed
-#define MICROPY_HW_UART6_RX         (pin_A12) // Fixed
+#define MICROPY_HW_UART6_TX         (pin_A11) // Valid: PA11
+#define MICROPY_HW_UART6_RX         (pin_A12) // Valid: PA12
 
 #define MICROPY_HW_UART_REPL        PYB_UART_1
 #define MICROPY_HW_UART_REPL_BAUD   115200
@@ -72,10 +74,10 @@ extern struct _spi_bdev_t spi_bdev;
 #define MICROPY_HW_I2C1_SCL         (pin_B6) // Valid: PB6, PB8
 #define MICROPY_HW_I2C1_SDA         (pin_B7) // Valid: PB7, PB9
 // #define MICROPY_HW_I2C2_NAME        "I2C2"
-#define MICROPY_HW_I2C2_SCL         (pin_B10) // Fixed
+#define MICROPY_HW_I2C2_SCL         (pin_B10) // Valid: PB10
 #define MICROPY_HW_I2C2_SDA         (pin_B9) // Valid: PB3, PB9
 // #define MICROPY_HW_I2C3_NAME        "I2C3"
-#define MICROPY_HW_I2C3_SCL         (pin_A8) // Fixed
+#define MICROPY_HW_I2C3_SCL         (pin_A8) // Valid: PA8
 #define MICROPY_HW_I2C3_SDA         (pin_B8) // Valid: PB4, PB8
 
 // SPI buses
@@ -119,12 +121,12 @@ extern struct _spi_bdev_t spi_bdev;
 
 // USB config
 #define MICROPY_HW_USB_FS              (1)
-#define MICROPY_HW_FLASH_FS_LABEL   "BlackPill"
+#define MICROPY_HW_FLASH_FS_LABEL   "blackpill"
 
 #define MICROPY_HW_USB_MANUFACTURER_STRING      "WeActStudio"
 #define MICROPY_HW_USB_PRODUCT_FS_STRING        "BlackPill v3.1 Comm Port (FS Mode)"
-#define MICROPY_HW_USB_CONFIGURATION_FS_STRING  "USB Config"
-#define MICROPY_HW_USB_INTERFACE_FS_STRING      "USB Interface"
+#define MICROPY_HW_USB_CONFIGURATION_FS_STRING  "BlackPill Config"
+#define MICROPY_HW_USB_INTERFACE_FS_STRING      "BlackPill Interface"
 // This is to save a tiny little space taken by strings.
 #define MICROPY_HW_USB_PRODUCT_HS_STRING        ""
 #define MICROPY_HW_USB_CONFIGURATION_HS_STRING  ""
