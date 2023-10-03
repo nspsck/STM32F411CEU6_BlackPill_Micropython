@@ -94,8 +94,8 @@
 
 // The pyboard has 4 LEDs
 #define MICROPY_HW_LED1             (pin_C13) // blue
-#define MICROPY_HW_LED_ON(pin)      (mp_hal_pin_high(pin))
-#define MICROPY_HW_LED_OFF(pin)     (mp_hal_pin_low(pin))
+#define MICROPY_HW_LED_ON(pin)      (mp_hal_pin_low(pin))
+#define MICROPY_HW_LED_OFF(pin)     (mp_hal_pin_high(pin))
 
 // USB config
 #define MICROPY_HW_USB_FS           (1)
