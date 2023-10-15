@@ -5,6 +5,8 @@ LD_FILES = boards/WEACTF411CE/stm32f411.ld boards/common_ifs.ld
 TEXT0_ADDR = 0x08000000
 TEXT1_ADDR = 0x08030000
 
+LTO ?= 1
+
 # Provide different variants for the downloads page.
 ifeq ($(BOARD_VARIANT),DP)
 MICROPY_FLOAT_IMPL=double

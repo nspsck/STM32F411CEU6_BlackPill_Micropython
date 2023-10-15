@@ -63,8 +63,8 @@ extern struct _spi_bdev_t spi_bdev;
 #define MICROPY_HW_UART2_TX         (pin_A2) // Valid: PA2
 #define MICROPY_HW_UART2_RX         (pin_A3) // Valid: PA3
 // #define MICROPY_HW_UART6_NAME       "USART6"
-#define MICROPY_HW_UART6_TX         (pin_A11) // Valid: PA11
-#define MICROPY_HW_UART6_RX         (pin_A12) // Valid: PA12
+// #define MICROPY_HW_UART6_TX         (pin_A11) // Valid: PA11
+// #define MICROPY_HW_UART6_RX         (pin_A12) // Valid: PA12
 
 #define MICROPY_HW_UART_REPL        PYB_UART_1
 #define MICROPY_HW_UART_REPL_BAUD   115200
@@ -83,10 +83,10 @@ extern struct _spi_bdev_t spi_bdev;
 // SPI buses
 // If you use the SPI-Flash, the SPI1 will alredy be used.
 // #define MICROPY_HW_SPI1_NAME        "SPI1"
-#define MICROPY_HW_SPI1_NSS         (pin_A4) // Valid: PA4, PA15
-#define MICROPY_HW_SPI1_SCK         (pin_A5) // Valid: PA5, PB3
-#define MICROPY_HW_SPI1_MISO        (pin_A6) // Valid: PA6, PB4
-#define MICROPY_HW_SPI1_MOSI        (pin_A7) // Valid: PA7, PB5
+// #define MICROPY_HW_SPI1_NSS         (pin_A4) // Valid: PA4, PA15
+// #define MICROPY_HW_SPI1_SCK         (pin_A5) // Valid: PA5, PB3
+// #define MICROPY_HW_SPI1_MISO        (pin_A6) // Valid: PA6, PB4
+// #define MICROPY_HW_SPI1_MOSI        (pin_A7) // Valid: PA7, PB5
 // #define MICROPY_HW_SPI2_NAME        "SPI2"
 #define MICROPY_HW_SPI2_NSS         (pin_B12) // Valid: PB9, PB12
 #define MICROPY_HW_SPI2_SCK         (pin_B13) // Valid: PB10, PB13 
@@ -111,13 +111,13 @@ extern struct _spi_bdev_t spi_bdev;
 // USRSW has no pullup or pulldown, and pressing the switch makes the input go low
 #define MICROPY_HW_USRSW_PIN        (pin_A0)
 #define MICROPY_HW_USRSW_PULL       (GPIO_PULLUP)
-#define MICROPY_HW_USRSW_EXTI_MODE  (GPIO_MODE_IT_RISING)
+#define MICROPY_HW_USRSW_EXTI_MODE  (GPIO_MODE_IT_FALLING)
 #define MICROPY_HW_USRSW_PRESSED    (0)
 
 // The pyboard has 4 LEDs
 #define MICROPY_HW_LED1             (pin_C13) // blue
-#define MICROPY_HW_LED_ON(pin)      (mp_hal_pin_low(pin))
-#define MICROPY_HW_LED_OFF(pin)     (mp_hal_pin_high(pin))
+#define MICROPY_HW_LED_ON(pin)      (mp_hal_pin_high(pin))
+#define MICROPY_HW_LED_OFF(pin)     (mp_hal_pin_low(pin))
 
 // USB config
 #define MICROPY_HW_USB_FS              (1)

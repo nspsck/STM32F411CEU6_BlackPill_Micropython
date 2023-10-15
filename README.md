@@ -10,7 +10,7 @@ The pins/features-configurations are final, changes will only be done when force
 
 ## Pins definition
 
-Things that in `()` are not available in the pre-built firmware but they have their definitions in the `mpconfigboard.h` file. These are only my choices, you may use any other pins, which were sated in the comment as `Valid`.
+Things that in `()` are not available in the pre-built firmware but they have their definitions in the `mpconfigboard.h` file. These are only my choices, you may use any other pins, which were sated in the comment as `Valid`. For the 8MB version, the `SPI1` bus is used for SPI flash.
 
 | USART  | USART1 | USART2 | USART6 |
 | ------ | ------ | ------ | ------ |
@@ -67,7 +67,7 @@ make -j
 ```
 Copy `WEACTF411CE` or `WEACTF411CE8MB` to the `micropython/ports/stm32/boards` folder. To build the firmware, make sure you are in the `micropython/ports/stm32` folder, and type the following:
 ```shell
-make -j LTO=1 BOARD=WEACTF411CE
+make -j LTO=1 BOARD=WEACTF411CE # With recent update, the LTO=1 can be omitted.
 ```
 There are 4 possible variants for the both of the boards: `DP`, `THREAD`, `DP_THREAD` and `NETWORK`. The `NETWORK` variant should not be used as it requires other components that has to be purchased separately.
 ```shell
@@ -75,5 +75,5 @@ There are 4 possible variants for the both of the boards: `DP`, `THREAD`, `DP_TH
 # DP: Use double precision for floats, each float number takes twice as much memory.
 # THREAD: Enables Thread. This is an experiemental feature
 # DP_THREAD: Enables Thread and use double precision.
-make -j LTO=1 BOARD=WEACTF411CE BOARD_VARIANT=VARIANTS
+make -j LTO=1 BOARD=WEACTF411CE BOARD_VARIANT=VARIANTS # With recent update, the LTO=1 can be omitted.
 ```

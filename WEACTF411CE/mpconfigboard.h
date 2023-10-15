@@ -35,15 +35,17 @@
 // 12.5 Mbit/s for USART1 and USART6
 // 6.25 Mbit/s for USART2
 // Not defining the NAMEs reduces firmware size
+// Using USART1 will make USB OTG FS only be able to use in either Host or Device mode.
 // #define MICROPY_HW_UART1_NAME       "USART1"
 #define MICROPY_HW_UART1_TX         (pin_A9) // Valid: PA9, PA15, PB6
 #define MICROPY_HW_UART1_RX         (pin_A10) // Valid: PA10, PB3, PB7
 // #define MICROPY_HW_UART2_NAME       "USART2"
 #define MICROPY_HW_UART2_TX         (pin_A2) // Valid: PA2
 #define MICROPY_HW_UART2_RX         (pin_A3) // Valid: PA3
+// Disabled because interferes with USB OTG FS.
 // #define MICROPY_HW_UART6_NAME       "USART6"
-#define MICROPY_HW_UART6_TX         (pin_A11) // Valid: PA11
-#define MICROPY_HW_UART6_RX         (pin_A12) // Valid: PA12
+// #define MICROPY_HW_UART6_TX         (pin_A11) // Valid: PA11
+// #define MICROPY_HW_UART6_RX         (pin_A12) // Valid: PA12
 
 #define MICROPY_HW_UART_REPL        PYB_UART_1
 #define MICROPY_HW_UART_REPL_BAUD   115200
@@ -89,7 +91,7 @@
 // USRSW has no pullup or pulldown, and pressing the switch makes the input go low
 #define MICROPY_HW_USRSW_PIN        (pin_A0)
 #define MICROPY_HW_USRSW_PULL       (GPIO_PULLUP)
-#define MICROPY_HW_USRSW_EXTI_MODE  (GPIO_MODE_IT_RISING)
+#define MICROPY_HW_USRSW_EXTI_MODE  (GPIO_MODE_IT_FALLING)
 #define MICROPY_HW_USRSW_PRESSED    (0)
 
 // The pyboard has 4 LEDs
