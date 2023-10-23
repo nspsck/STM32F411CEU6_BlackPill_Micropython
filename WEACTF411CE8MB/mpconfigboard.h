@@ -35,7 +35,7 @@
 // External SPI Flash config
 #if !MICROPY_HW_ENABLE_INTERNAL_FLASH_STORAGE
 
-#define MICROPY_HW_SPIFLASH_SIZE_BITS (64 * 1024 * 1024) // 16 Mbit (2 MByte)
+#define MICROPY_HW_SPIFLASH_SIZE_BITS (64 * 1024 * 1024) // 64 Mbit (8 MByte)
 
 #define MICROPY_HW_SPIFLASH_CS      (pin_A4)
 #define MICROPY_HW_SPIFLASH_SCK     (pin_A5)
