@@ -2,7 +2,7 @@
 
 This port gives you a py-board-like experience using the BlackPill created by WeAct Studio.
 
-There are 2 versions of Firmware provided, one for the 8MB version and one for the regular version. Both can be found in the `firmware` folder.
+There are 2 versions of Firmware provided, one for the 8MB version and one for the regular version. Both can be found in the `firmware` folder. Both in `.dfu` and `.hex` format.
 
 The 8MB version lets you use the 8MB spi storage to store your codes while the regular version offers 155KB flash storage for your codes. The trade of is that you lose `SPI1`.
 
