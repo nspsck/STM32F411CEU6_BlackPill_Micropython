@@ -7,6 +7,9 @@ TEXT1_ADDR = 0x08030000
 
 LTO ?= 1
 
+# Micropython settings.
+MICROPY_VFS_LFS2 = 1
+
 # Provide different variants for the downloads page.
 ifeq ($(BOARD_VARIANT),DP)
 MICROPY_FLOAT_IMPL=double
