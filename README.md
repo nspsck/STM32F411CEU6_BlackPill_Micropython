@@ -33,6 +33,51 @@ Things that in `()` are not available in the pre-built firmware but they have th
 | ---- | --- | ------ | ------ | ----- | ----- |
 | C13  | A0  | PA11   | PA12   | PA13  | PA14  |
 
+## Lfs2 Support
+
+`Lfs2` is a little fail-safe filesystem designed for microcontrollers that supports dynamic wear leveling, which is quiet useful when you are using the internal flash to log datas, since `FAT` does not have a wear leveling implementation and you will be wearing off your 10K cycles quiet fast.
+
+To format the filesystem to `Lfs2` you can simply excute the following code:
+
+```python
+import os, pyb
+os.umount('/flash')
+os.VfsLfs2.mkfs(pyb.Flash(start=0))
+os.mount(pyb.Flash(start=0), '/flash')
+os.chdir('/flash')
+```
+
+To avoid the annoying Windows formatation message, add the following to `boot.py`:
+
+```python
+import pyb
+pyb.usb_mode('VCP') # This will change the COM-number on Windows.
+```
+
+To go back to `FAT`:
+
+```python
+import os, pyb
+os.umount('/flash')
+os.VfsFat.mkfs(pyb.Flash(start=0))
+os.mount(pyb.Flash(start=0), '/flash')
+os.chdir('/flash')
+```
+
+To use a hybrid mode:
+```python
+import os, pyb
+os.umount('/flash')
+p1 = pyb.Flash(start=0, len=256*1024) # You have to caculate the length by your self.
+p2 = pyb.Flash(start=256*1024) # You have to caculate the length by your self.
+os.VfsFat.mkfs(p1)
+os.VfsLfs2.mkfs(p2)
+os.mount(p1, '/flash')
+os.mount(p2, '/data')
+os.chdir('/flash')
+```
+
+
 ## Storage modification
 
 If changing the flash layout is at your interest, you can modify the following section the `stm32f411.ld` file. 
