@@ -122,3 +122,37 @@ There are 4 possible variants for the both of the boards: `DP`, `THREAD`, `DP_TH
 # DP_THREAD: Enables Thread and use double precision.
 make -j LTO=1 BOARD=WEACTF411CE BOARD_VARIANT=VARIANTS # With recent update, the LTO=1 can be omitted.
 ```
+
+## How to Flash
+
+### Flashing the firmware
+You can flash the firmware by following the official guide on i.e. [https://micropython.org/download/NUCLEO_F411RE/](https://micropython.org/download/NUCLEO_F411RE/) for both `.hex` and `.dfu` file.
+
+### Mass erase
+
+`st-flash`:
+```shell
+st-flash erase
+```
+
+`STM32CubeProgrammer`:
+```shell
+STM32_Programmer.sh -c port=SWD -e all
+```
+
+`dfu-util`:
+```shell
+# You can save the following as a file and run it with: sh file.sh
+#!/bin/sh
+set -x
+echo -e -n "\xff" > ff.bin
+dfu-util -s :mass-erase:force -a 0 -d 0483:df11 -D ff.bin
+```
+
+### STM32CubeProgrammer
+
+In addtion to that, if you were using `STM32CubeProgrammer` with a GUI, everything should be very straight foward. And this is the most easy way to flash your device imo. There are 3 options available: `ST-Link, UART and USB` each corresponding to using a `st-link`, using a `uart-bridge` and using the built-in `dfu`.
+
+### Side note
+
+If you were unlucky and got a clone/pirated board, you might find it difficult to flash the firmware using `dfu`. (`st-link` and `uart-bridge` works just fine.) You can try to connect `A10` to the `GND` pin before you booting the board into dfu. This might solve your issue.
