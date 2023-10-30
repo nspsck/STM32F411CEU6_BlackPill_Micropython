@@ -80,7 +80,26 @@ os.chdir('/flash')
 
 ## Storage modification
 
-If changing the flash layout is at your interest, you can modify the following section the `stm32f411.ld` file. 
+If changing the flash layout is at your interest, you can modify the following section the `stm32f411.ld` file. However, there is this one rule: *never assign a part of a sector more than your `FS_CACHE` size for `Flash_FS`.* (Otherwise corruption will occur. This is caused by the fact that F4 series has very big sectors and each sectors greater than `FS_CACHE` can not be put into the cache.)
+
+The default one is almost optimized (you can maybe still squeeze something out of the `FLASH_ISR` sector) for the RAM and flash ratio. The following are 2 suggestions/examples of working modifications:
+
+Example 1: Get a tiny little more flash at cost of the same amount of RAM.
+```ld
+MEMORY
+{
+    FLASH (rx)      : ORIGIN = 0x08000000, LENGTH = 512K /* entire flash */
+    FLASH_ISR (rx)  : ORIGIN = 0x08000000, LENGTH = 16K /* sector 0 */
+    /* This is your space for storing Code. */
+    FLASH_FS (rx)   : ORIGIN = 0x08004000, LENGTH = 80K /* sectors 1,2,3,4: 16k+16k+16k+32K(of 64K)=80K */
+    /* This is where the firmware is stored. */
+    FLASH_TEXT (rx) : ORIGIN = 0x08020000, LENGTH = 384K /* sectors 5, 6, 7: 128K+128K+128K=384K */
+    RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 96K
+    FS_CACHE (xrw)  : ORIGIN = 0x20018000, LENGTH = 32K
+}
+```
+
+Example 2: Maximizing flash size. (not quite, you can still increase RAM usage for more flash, but at that point, it is just not worth it anymore)
 ```ld
 MEMORY
 {
@@ -90,11 +109,11 @@ MEMORY
     FLASH_FS (rx)   : ORIGIN = 0x08004000, LENGTH = 176K /* sectors 1,2,3,4,5: 16k+16k+16k+64K+64K(of 128K)=176K */
     /* This is where the firmware is stored. */
     FLASH_TEXT (rx) : ORIGIN = 0x08030000, LENGTH = 320K /* sectors 5, 6, 7: 64K(of 128K)+128K+128K=320K */
-    RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 112K
-    FS_CACHE (xrw)  : ORIGIN = 0x2001c000, LENGTH = 16K
+    RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 64K
+    FS_CACHE (xrw)  : ORIGIN = 0x20010000, LENGTH = 64K
 }
 ```
-Please make sure you modify the `TEXT0_ADDR` and `TEXT1_ADDR` in `mpconfigboard.mk` as well if you intend to use `.bin` files. Tho, you can also just delete these 2 lines and just use the `.hex` file.
+Note that you have to wipe the whole flash during flashing the firmware for the modifications to take effect.
 
 ## How to build
 
