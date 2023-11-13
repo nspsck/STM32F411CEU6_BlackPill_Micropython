@@ -80,6 +80,7 @@ os.chdir('/flash')
 
 ## Storage modification
 
+### Flash layout
 If changing the flash layout is at your interest, you can modify the following section the `stm32f411.ld` file. However, there is this one rule: *never assign a part of a sector more than your `FS_CACHE` size for `Flash_FS`.* (Otherwise corruption will occur. This is caused by the fact that F4 series has very big sectors and each sectors greater than `FS_CACHE` can not be put into the cache.)
 
 The default one is almost optimized (you can maybe still squeeze something out of the `FLASH_ISR` sector) for the RAM and flash ratio. The following are 2 suggestions/examples of working modifications:
@@ -114,6 +115,10 @@ MEMORY
 }
 ```
 Note that you have to wipe the whole flash during flashing the firmware for the modifications to take effect.
+
+### Using external SPI-Flash
+You can either solder a external SPI-Flash directly on the board or connect the first SPI interface (`A4, A5, A6, A7`) to the external SPI-Flash module. Both way you can use the `8MB` version of firmware directly. Assuming your external SPI-Flash has `8MB` of storage.
+If the SPI-Flash is not wired/soldered correctly, the firmware still boots but you do not have access to the flash storage.
 
 ## How to build
 ### Vanilla
