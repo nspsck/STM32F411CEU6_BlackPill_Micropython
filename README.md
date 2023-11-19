@@ -4,7 +4,7 @@ This port gives you a py-board-like experience using the BlackPill created by We
 
 There are 2 versions of Firmware provided, one for the 8MB version and one for the regular version. Both can be found in the `firmware` folder. Both in `.dfu` and `.hex` format.
 
-The 8MB version lets you use the 8MB spi storage to store your codes while the regular version offers 47KB flash storage (or 63KB if you were using `Lfs2`) for your codes. The trade off is that you lose `SPI1`.
+The 8MB version lets you use the 8MB spi storage to store your codes while the regular version offers 47KB flash storage (or 63KB if you were using `Lfs2`) for your codes. The trade off is that you lose `SPI1`. Also, the 8MB version provides 12KB more RAM. The 8MB version can be directly used on a board with 16MB SPI-flash. (I do not understand why, but it works, magic. And by works I mean, it reports a 16MB flash.)
 
 The pins/features-configurations are final, changes will only be done when forced by Micropython updates.
 

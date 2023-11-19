@@ -34,13 +34,14 @@
 
 // External SPI Flash config
 #if !MICROPY_HW_ENABLE_INTERNAL_FLASH_STORAGE
+#define MICROPY_HW_SPIFLASH_ENABLE_CACHE (1)
 
 // #define MICROPY_HW_SPIFLASH_SIZE_BITS (16 * 1024 * 1024) // 16 Mbit (2 MByte)
 // #define MICROPY_HW_SPIFLASH_SIZE_BITS (32 * 1024 * 1024) // 32 Mbit (4 MByte)
 #define MICROPY_HW_SPIFLASH_SIZE_BITS (64 * 1024 * 1024) // 64 Mbit (8 MByte)
 // #define MICROPY_HW_SPIFLASH_SIZE_BITS (128 * 1024 * 1024) // 128 Mbit (16 MByte)
 // #define MICROPY_HW_SPIFLASH_SIZE_BITS (256 * 1024 * 1024) // 256 Mbit (32 MByte)
-//#define MICROPY_HW_SPIFLASH_SIZE_BITS (512 * 1024 * 1024) // 512 Mbit (64 MByte)
+// #define MICROPY_HW_SPIFLASH_SIZE_BITS (512 * 1024 * 1024) // 512 Mbit (64 MByte)
 
 #define MICROPY_HW_SPIFLASH_CS      (pin_A4)
 #define MICROPY_HW_SPIFLASH_SCK     (pin_A5)
@@ -49,7 +50,6 @@
 
 extern const struct _mp_spiflash_config_t spiflash_config;
 extern struct _spi_bdev_t spi_bdev;
-#define MICROPY_HW_SPIFLASH_ENABLE_CACHE (1)
 #define MICROPY_HW_BDEV_SPIFLASH    (&spi_bdev)
 #define MICROPY_HW_BDEV_SPIFLASH_CONFIG (&spiflash_config)
 #define MICROPY_HW_BDEV_SPIFLASH_SIZE_BYTES (MICROPY_HW_SPIFLASH_SIZE_BITS / 8)

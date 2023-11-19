@@ -4,7 +4,7 @@ AF_FILE = boards/stm32f411_af.csv
 LD_FILES = boards/WEACTF411CE/stm32f411.ld boards/common_ifs.ld
 
 # Micropython settings.
-MICROPY_VFS_LFS2 = 1
+MICROPY_VFS_LFS2 ?= 1
 
 # Provide different variants for the downloads page.
 ifeq ($(BOARD_VARIANT),DP)
