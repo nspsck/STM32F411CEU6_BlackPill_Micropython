@@ -149,7 +149,7 @@ make -j LTO=1 BOARD=WEACTF411CE BOARD_VARIANT=VARIANTS # With recent update, the
 ### User C modules
 If you wish to add some C modules, e.g. [a st7735 driver](https://github.com/nspsck/st7735s_WeAct_Studio_TFT_port/tree/main) you have to do the following:
 ```shell
-make -j LTO=1 BOARD=WEACTF411CE USER_C_MODULES=~/lcd_c_modules/st7789mod/ CFLAGS_EXTRA=-DMODULE_EXAMPLE_ENABLED=1 
+make -j LTO=1 BOARD=WEACTF411CE USER_C_MODULES=~/lcd_c_modules/st7789mod/
 ```
 change `~/lcd_c_modules/st7789mod/` to the directory where your modules are located at. Under that directory has to be a `microptyhon.cmake` file which includes includes all of the modules you want to have available. Something like this:
 ```cmake
