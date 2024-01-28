@@ -2,17 +2,19 @@
 
 This port gives you a py-board-like experience using the BlackPill created by WeAct Studio.
 
-There are 2 versions of Firmware provided, one for the 8MB version and one for the regular version. Both can be found in the `firmware` folder. Both in `.dfu` and `.hex` format.
+There are 2 major versions of the BlackPills, they differ only in terms of crystal speed. A total of 6 versions of Firmware are provided, 3 for the 8MHz crystal version and 3 for the regular 25MHz crystal version. They differ only in the SPI flash size (0MB, 8MB and 16MB). All of them can be found in the `firmware` folder and they come in `.dfu` and `.hex` format. You can also define your own SPI flash size as described in the `How to build` section.
 
-The 8MB version lets you use the 8MB spi storage to store your codes while the regular version offers 47KB flash storage (or 63KB if you were using `Lfs2`) for your codes. The trade off is that you lose `SPI1`. Also, the 8MB version provides 12KB more RAM. The 8MB version can be directly used on a board with 16MB SPI-flash. (I do not understand why, but it works, magic. And by works I mean, it reports a 16MB flash.)
+The 8MB version has the advantage to be more stable in terms of dfu-bootloader connectivity, as it tolerates a bigger margin of errors caused by ambient temperature.
+
+A BlackPill with spi flash has roughtly 12KB more RAM available. This is due to smaller cache required for the filesystem.
 
 The pins/features-configurations are final, changes will only be done when forced by Micropython updates.
 
 ## Pins definition
 
-Things that in `()` are not available in the pre-built firmware but they have their definitions in the `mpconfigboard.h` file. These are only my choices, you may use any other pins, which were sated in the comment as `Valid`. For the 8MB version, the `SPI1` bus is used for SPI flash.
+Things that in `()` are available in the pre-built firmware but they might interfere with other interfaces, so be caucious. These are only my choices, you may use any other pins, which were sated in the comment as `Valid`. For the 8MB version, the `SPI1` bus is used for SPI flash.
 
-| USART  | USART1 | USART2 | USART6 |
+| USART  | USART1 | USART2 |(USART6)|
 | ------ | ------ | ------ | ------ |
 | TX     | A9     | A2     | A11    |
 | RX     | A10    | A3     | A12    |
@@ -117,7 +119,7 @@ MEMORY
 Note that you have to wipe the whole flash during flashing the firmware for the modifications to take effect.
 
 ### Using external SPI-Flash
-You can either solder a external SPI-Flash directly on the board or connect the first SPI interface (`A4, A5, A6, A7`) to the external SPI-Flash module. Both way you can use the `8MB` version of firmware directly. Assuming your external SPI-Flash has `8MB` of storage.
+You can either solder a external SPI-Flash directly on the board or connect the first SPI interface (`A4, A5, A6, A7`) to the external SPI-Flash module. Both way you can use the e.g. `8MB` version of firmware directly. Assuming your external SPI-Flash has `8MB` of storage.
 If the SPI-Flash is not wired/soldered correctly, the firmware still boots but you do not have access to the flash storage.
 
 ## How to build
@@ -134,17 +136,22 @@ git submodule update --init --recursive
 cd mpy-cross
 make -j
 ```
-Copy `WEACTF411CE` or `WEACTF411CE8MB` to the `micropython/ports/stm32/boards` folder. To build the firmware, make sure you are in the `micropython/ports/stm32` folder, and type the following:
+Copy `WEACTF411CE` to the `micropython/ports/stm32/boards` folder. To build the firmware, make sure you are in the `micropython/ports/stm32` folder, and type the following:
 ```shell
 make -j LTO=1 BOARD=WEACTF411CE # With recent update, the LTO=1 can be omitted.
 ```
-There are 4 possible variants for the both of the boards: `DP`, `THREAD`, `DP_THREAD` and `NETWORK`. The `NETWORK` variant should not be used as it requires other components that has to be purchased separately.
+There are 4 possible variants for the both of the base firmware: `DP`, `THREAD`, `DP_THREAD` and `NETWORK`. The `NETWORK` variant requires other components that has to be purchased separately. And there are 2 variables that controls both the crystal frequency and the spi flash size, namely `CRYSTAL_FREQ` and `SPI_FLASH_SIZE`.
 ```shell
 # replace VARIANTS with DP, THREAD or DP_THREAD
 # DP: Use double precision for floats, each float number takes twice as much memory.
 # THREAD: Enables Thread. This is an experiemental feature
 # DP_THREAD: Enables Thread and use double precision.
-make -j LTO=1 BOARD=WEACTF411CE BOARD_VARIANT=VARIANTS # With recent update, the LTO=1 can be omitted.
+# CRYSTAL_FREQ: You can assign any value to this, if this keyword is defined, 
+#               the 8MHz crystal firmware will be built. You can not make it
+#               take the given value, because plli2svalues.py reads the .h files 
+#               directly. (More of a reminder for myself.)
+# SPI_FLASH_SIZE: You can set the SPI_FLASH_SIZE here to build your firmware accordingly.
+make -j LTO=1 BOARD=WEACTF411CE BOARD_VARIANT=VARIANTS CRYSTAL_FREQ=no_care SPI_FLASH_SIZE=SIZE_IN_MB # With recent update, the LTO=1 can be omitted.
 ```
 ### User C modules
 If you wish to add some C modules, e.g. [a st7735 driver](https://github.com/nspsck/st7735s_WeAct_Studio_TFT_port/tree/main) you have to do the following:
