@@ -4,7 +4,7 @@ This port gives you a py-board-like experience using the BlackPill created by We
 
 There are 2 major versions of the BlackPills, they differ only in terms of crystal speed. A total of 6 versions of Firmware are provided, 3 for the 8MHz crystal version and 3 for the regular 25MHz crystal version. They differ only in the SPI flash size (0MB, 8MB and 16MB). All of them can be found in the `firmware` folder and they come in `.dfu` and `.hex` format. You can also define your own SPI flash size as described in the `How to build` section.
 
-The 8MB version has the advantage to be more stable in terms of dfu-bootloader connectivity, as it tolerates a bigger margin of errors caused by ambient temperature.
+The 8MHz version has the advantage to be more stable in terms of dfu-bootloader connectivity, as it tolerates a bigger margin of errors caused by ambient temperature.
 
 A BlackPill with spi flash has roughtly 12KB more RAM available. This is due to smaller cache required for the filesystem.
 
