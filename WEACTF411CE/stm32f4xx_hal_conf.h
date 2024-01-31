@@ -6,7 +6,11 @@
 #define MICROPY_INCLUDED_STM32F4XX_HAL_CONF_H
 
 // Oscillator values in Hz
+#if MICROPY_PY_CRYSTAL_FREQ == 25
 #define HSE_VALUE (25000000)
+#else
+#define HSE_VALUE (8000000)
+#endif
 #define LSE_VALUE (32768)
 #define EXTERNAL_CLOCK_VALUE (12288000)
 
