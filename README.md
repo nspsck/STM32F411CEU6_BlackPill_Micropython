@@ -83,11 +83,11 @@ os.chdir('/flash')
 ## Storage modification
 
 ### Flash layout
-If changing the flash layout is at your interest, you can modify the following section the `stm32f411.ld` file. However, there is this one rule: *never assign a part of a sector more than your `FS_CACHE` size for `Flash_FS`.* (Otherwise corruption will occur. This is caused by the fact that F4 series has very big sectors and each sectors greater than `FS_CACHE` can not be put into the cache.)
+If changing the flash layout is at your interest, you can modify the following section the `stm32f411.ld` file. However, there is this one rule: **never assign a sector of size more than your `FS_CACHE` size for `Flash_FS`.** Otherwise corruption will occur. This is caused by the fact that F4 series has very big sectors and every sector has to be erased before writting data to it. In case the `FS_CACHE` is not big enough to cache the biggest sector, when you are trying to write to the reset part of the sector, the sector itself will be erased but only part of its content was cached, as a result: you lost your uncached data and hence a corruption.
 
-The default one is almost optimized (you can maybe still squeeze something out of the `FLASH_ISR` sector) for the RAM and flash ratio. The following are 2 suggestions/examples of working modifications:
+The default one is almost optimized for the RAM and flash ratio. The following are 2 suggestions/examples of working modifications:
 
-Example 1: Get a tiny little more flash at cost of the same amount of RAM.
+Example 1: Get a tiny little more flash (16K) at cost of the same amount of RAM. You are using sector 1, 2, 3 (each has 16K) and a part of sector 4 (has 64K total, but only 32K of it is used) for your filesystem. The increased size can be anything between 0K to 32K (not including 0K and 32K). And you have to caculate the address accordingly.
 ```ld
 MEMORY
 {
@@ -102,7 +102,7 @@ MEMORY
 }
 ```
 
-Example 2: Maximizing flash size. (not quite, you can still increase RAM usage for more flash, but at that point, it is just not worth it anymore)
+Example 2: Maximizing flash size. You are using sector 1, 2, 3 (each has 16K) and 4 (has 64K total) for your filesystem. This is the maximum amount of flash you can get at the cost of 128K firmware size and 64K of ram. This is the max amount, because for the next step you need 128K RAM, and you only have 128K RAM on the stm32f411ce. Also, the firmware is reduced by 128K because when you earse sector 5, the part of the firmware stored on it will also be removed, causing the system to fail.
 ```ld
 MEMORY
 {
@@ -111,7 +111,7 @@ MEMORY
     /* This is your space for storing Code. */
     FLASH_FS (rx)   : ORIGIN = 0x08004000, LENGTH = 176K /* sectors 1,2,3,4,5: 16k+16k+16k+64K+64K(of 128K)=176K */
     /* This is where the firmware is stored. */
-    FLASH_TEXT (rx) : ORIGIN = 0x08030000, LENGTH = 320K /* sectors 5, 6, 7: 64K(of 128K)+128K+128K=320K */
+    FLASH_TEXT (rx) : ORIGIN = 0x08040000, LENGTH = 256K /* sectors 6, 7: 128K+128K=256K */
     RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 64K
     FS_CACHE (xrw)  : ORIGIN = 0x20010000, LENGTH = 64K
 }
