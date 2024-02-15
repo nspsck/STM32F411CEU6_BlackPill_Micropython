@@ -1,4 +1,10 @@
 # STM32F411CEU6_BlackPill_Micropython
+**INDEX:**:
+- [Pins definition](#pins-definition)
+- [Lfs2 Support](#lfs2-support)
+- [Storage modification](#storage-modification)
+- [How to build](#how-to-build)
+- [How to Flash](#how-to-flash)
 
 This port gives you a py-board-like experience using the BlackPill created by WeAct Studio.
 
