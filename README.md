@@ -157,8 +157,19 @@ There are 4 possible variants for the both of the base firmware: `DP`, `THREAD`,
 #               take the given value, because plli2svalues.py reads the .h files 
 #               directly. (More of a reminder for myself.)
 # SPI_FLASH_SIZE: You can set the SPI_FLASH_SIZE here to build your firmware accordingly.
-make -j LTO=1 BOARD=WEACTF411CE BOARD_VARIANT=VARIANTS CRYSTAL_FREQ=no_care SPI_FLASH_SIZE=SIZE_IN_MB # With recent update, the LTO=1 can be omitted.
+# LTO: Wether to optimize for firmware size at the cost of some performance.
+make -j LTO=1 BOARD=WEACTF411CE BOARD_VARIANT=VARIANTS CRYSTAL_FREQ=ANY_VALUE SPI_FLASH_SIZE=SIZE_IN_MB # With recent update, the LTO=1 can be omitted.
 ```
+**Examples**:
+
+For 8MHz crystal and 16MB spi flash:
+
+`make -j BOARD=WEACTF411CE BOARD_VARIANT=VARIANTS CRYSTAL_FREQ=8 SPI_FLASH_SIZE=16`
+
+For 25MHz crystal and 16MB spi flash, you have to leave `CRYSTAL_FREQ` out:
+
+`make -j BOARD=WEACTF411CE BOARD_VARIANT=VARIANTS SPI_FLASH_SIZE=16`
+
 ### User C modules
 If you wish to add some C modules, e.g. [a st7735 driver](https://github.com/nspsck/st7735s_WeAct_Studio_TFT_port/tree/main) you have to do the following:
 ```shell
