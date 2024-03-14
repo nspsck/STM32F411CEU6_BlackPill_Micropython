@@ -2,6 +2,11 @@
 #include "storage.h"
 #include "spi.h"
 
+#if MICROPY_VERSION >= MICROPY_MAKE_VERSION(1, 23, 0) // STATIC should be replaced with static.
+#undef STATIC   // This may become irrelevant later on.
+#define STATIC static
+#endif
+
 #if !MICROPY_HW_ENABLE_INTERNAL_FLASH_STORAGE
 
 STATIC const spi_proto_cfg_t spi_bus = {
