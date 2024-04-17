@@ -8,17 +8,17 @@
 
 This port gives you a py-board-like experience using the BlackPill created by WeAct Studio.
 
-There are 2 major versions of the BlackPills, they differ only in terms of crystal speed. A total of 6 versions of Firmware are provided, 3 for the 8MHz crystal version and 3 for the regular 25MHz crystal version. They differ only in the SPI flash size (0MB, 8MB and 16MB). All of them can be found in the `firmware` folder and they come in both `.dfu` and `.hex` format. You can also define your own SPI flash size as described in the `How to build` section.
+There are 2 major versions of the BlackPills, they differ only in terms of crystal speed. A total of 6 versions of Firmware are provided, 3 for the 8MHz crystal version and 3 for the regular 25MHz crystal version. They differ only in the SPI flash size (0MB, 8MB, and 16MB). All of them can be found in the `firmware` folder and they come in both `.dfu` and `.hex` format. You can also define your own SPI flash size as described in the `How to build` section.
 
-The 8MHz version has the advantage to be more stable in terms of dfu-bootloader connectivity, as it tolerates a bigger margin of errors caused by ambient temperature.
+The 8MHz version has the advantage of being more stable in terms of dfu-bootloader connectivity, as it tolerates a bigger margin of errors caused by ambient temperature.
 
-A BlackPill with spi flash has roughtly 12KB more RAM available. This is due to smaller cache required for the filesystem.
+A BlackPill with SPI flash has roughly 12KB more RAM available. This is due to the smaller cache required for the filesystem.
 
 The pins/features-configurations are final, changes will only be done when forced by Micropython updates.
 
 ## Pins definition
 
-Things that in `()` are available in the pre-built firmware but they might interfere with other interfaces, so be caucious. These are only my choices, you may use any other pins, which were stated in the comment as `Valid`. For the 8MB version, the `SPI1` bus is used for SPI flash.
+Things that in `()` are available in the pre-built firmware but they might interfere with other interfaces, so be cautious. These are only my choices, you may use any other pins, which were stated in the comment as `Valid`. For the 8MB version, the `SPI1` bus is used for SPI flash.
 
 | USART  | USART1 | USART2 |(USART6)|
 | ------ | ------ | ------ | ------ |
@@ -43,9 +43,9 @@ Things that in `()` are available in the pre-built firmware but they might inter
 
 ## Lfs2 Support
 
-`Lfs2` is a little fail-safe filesystem designed for microcontrollers to support dynamic wear leveling, which is quiet useful when you are using the internal flash to log data. Since `FAT` does not have a wear leveling implementation, you will be wearing off your 10K cycles of the leading sectors quiet fast.
+`Lfs2` is a little fail-safe filesystem designed for microcontrollers to support dynamic wear leveling, which is quite useful when you are using the internal flash to log data. Since `FAT` does not have a wear leveling implementation, you will be wearing off your 10K cycles of the leading sectors quite fast.
 
-To format the filesystem to `Lfs2`, you can simply excute the following code:
+To format the filesystem to `Lfs2`, you can simply execute the following code:
 
 ```python
 import os, pyb
@@ -55,7 +55,7 @@ os.mount(pyb.Flash(start=0), '/flash')
 os.chdir('/flash')
 ```
 
-To avoid the annoying Windows formatation message, add the following to `boot.py`:
+To avoid the annoying Windows formation message, add the following to `boot.py`:
 
 ```python
 import pyb
@@ -88,12 +88,12 @@ os.chdir('/flash')
 
 ## Storage modification
 
-### Flash layout (Only useful for the internal flash version)
-If changing the flash layout is at your interest, you can modify the following section in the `stm32f411.ld` file. However, there is this one rule: **never assign a sector of size more than your `FS_CACHE` size for `Flash_FS`.** Otherwise corruption will occur. This is caused by the fact that F4 series has very big sectors and every sector has to be erased before writting data to it. In case the `FS_CACHE` is not big enough to cache the biggest sector, when you are trying to write to the reset part of the sector, the sector itself will be erased but only part of its content was cached, as a result: you lost your uncached data and hence a corruption.
+### Flash layout (Only useful for the internal Flash version)
+If changing the flash layout is of interest, you can modify the following section in the `stm32f411.ld` file. However, there is this one rule: **Never assign a sector of size more than your `FS_CACHE` size for `Flash_FS`.** Otherwise corruption will occur. This is caused by the fact that F4 series has very big sectors and every sector has to be erased before writing data to it. In case the `FS_CACHE` is not big enough to cache the biggest sector, when you are trying to write to the reset part of the sector, the sector itself will be erased but only part of its content was cached, as a result: you lost your uncached data and hence corruption.
 
 The default one is almost optimized for the RAM and flash ratio. The following are 2 suggestions/examples of working modifications:
 
-Example 1: Get a tiny little more flash (16K) at cost of the same amount of RAM. You are using sector 1, 2, 3 (each has 16K) and a part of sector 4 (has 64K total, but only 32K of it is used) for your filesystem. The increased size can be anything between 0K to 32K (not including 0K and 32K). And you have to caculate the address accordingly.
+Example 1: Get a tiny little more flash (16K) at a cost of the same amount of RAM. You are using sectors 1, 2, 3 (each has 16K) and a part of sector 4 (which has 64K total, but only 32K of it is used) for your filesystem. The increased size can be anything between 0K to 32K (not including 0K and 32K). And you have to calculate the address accordingly.
 ```ld
 MEMORY
 {
@@ -108,7 +108,7 @@ MEMORY
 }
 ```
 
-Example 2: Maximizing flash size. You are using sector 1, 2, 3 (each has 16K) and 4 (has 64K total) for your filesystem. This is the maximum amount of flash you can get at the cost of reducing maximum firmware size by 128K and 64K of ram. This is the max flash size, because for the next step you need 128K RAM, and you only have 128K RAM on the stm32f411ce. Also, the maximum firmware size is reduced by 128K because when you earse sector 5, the part of the firmware stored on it will also be removed, causing the system to fail.
+Example 2: Maximizing flash size. You are using sectors 1, 2, 3 (each has 16K), and 4 (has 64K total) for your filesystem. This is the maximum amount of flash you can get at the cost of reducing the maximum firmware size by 128K and 64K of RAM. This is the max flash size, because for the next step, you need 128K RAM, and you only have 128K RAM on the stm32f411ce. Also, the maximum firmware size is reduced by 128K because when you erase sector 5, the part of the firmware stored on it will also be removed, causing the system to fail.
 ```ld
 MEMORY
 {
@@ -122,15 +122,15 @@ MEMORY
     FS_CACHE (xrw)  : ORIGIN = 0x20010000, LENGTH = 64K
 }
 ```
-Note that you have to wipe the whole flash during flashing the firmware for the modifications to take effect.
+Note that you have to wipe the whole flash while flashing the firmware for the modifications to take effect.
 
 ### Using external SPI-Flash
-You can either solder a external SPI-Flash directly on the board or connect the first SPI interface (`A4, A5, A6, A7`) to the external SPI-Flash module. Both way you can use a e.g. `8MB` version of firmware directly. Assuming your external SPI-Flash has `8MB` of storage.
+You can either solder an external SPI-Flash directly on the board or connect the first SPI interface (`A4, A5, A6, A7`) to the external SPI-Flash module. Both ways you can use an e.g. `8MB` version of firmware directly. Assuming your external SPI-Flash has `8MB` of storage.
 If the SPI-Flash is not wired/soldered correctly, the firmware still boots but you do not have access to the flash storage.
 
 ## How to build
 ### Vanilla
-First of all, you have to have a linux enviroment and get the compilers. On ubuntu 23.10 and above or debian 12 and above, it's called `gcc-arm-none-eabi`. On arch linux, it's called `arm-none-eabi-gcc`.
+First of all, you have to have a Linux environment and get the compilers. On Ubuntu 23.10 and above or Debian 12 and above, it's called `gcc-arm-none-eabi`. On arch Linux, it's called `arm-none-eabi-gcc`.
 ```shell
 sudo apt-get -y install gcc-arm-none-eabi build-essential # On Ubuntu or Debian
 sudo pacman -S arm-none-eabi-gcc base-devel # On Arch Linux
@@ -147,18 +147,18 @@ Copy `WEACTF411CE` to the `micropython/ports/stm32/boards` folder. To build the 
 ```shell
 make -j LTO=1 BOARD=WEACTF411CE # With recent update, the LTO=1 can be omitted.
 ```
-There are 4 possible variants for the both of the base firmware: `DP`, `THREAD`, `DP_THREAD` and `NETWORK`. The `NETWORK` variant requires other components that has to be purchased separately. And there are 2 variables that controls both the crystal frequency and the spi flash size, namely `CRYSTAL_FREQ` and `SPI_FLASH_SIZE`.
+There are 4 possible variants for both of the base firmware: `DP`, `THREAD`, `DP_THREAD`, and `NETWORK`. The `NETWORK` variant requires other components that have to be purchased separately. And there are 2 variables that controls both the crystal frequency and the spi flash size, namely `CRYSTAL_FREQ` and `SPI_FLASH_SIZE`.
 ```shell
 # replace VARIANTS with DP, THREAD or DP_THREAD
 # DP: Use double precision for floats, each float number takes twice as much memory.
-# THREAD: Enables Thread. This is an experiemental feature
+# THREAD: Enables Thread. This is an experimental feature
 # DP_THREAD: Enables Thread and use double precision.
 # CRYSTAL_FREQ: You can assign any value to this, if this keyword is defined, 
 #               the 8MHz crystal firmware will be built. You can not make it
 #               take the given value, because plli2svalues.py reads the .h files 
 #               directly. (More of a reminder for myself.)
 # SPI_FLASH_SIZE: You can set the SPI_FLASH_SIZE here to build your firmware accordingly.
-# LTO: Wether to optimize for firmware size at the cost of some performance.
+# LTO: Whether to optimize for firmware size at the cost of some performance.
 make -j LTO=1 BOARD=WEACTF411CE BOARD_VARIANT=VARIANTS CRYSTAL_FREQ=ANY_VALUE SPI_FLASH_SIZE=SIZE_IN_MB # With recent update, the LTO=1 can be omitted.
 ```
 **Examples**:
@@ -185,7 +185,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/example2/micropython.cmake)
 ### Frozen contents
 If you wish to freeze some `.py` modules to your firmware, e.g. some fonts files, you can do something like this:
 
-- Step 1: create a directory called `modules` under `ports/stm32`.
+- Step 1: Create a directory called `modules` under `ports/stm32`.
 - Step 2: put all the `.py` files into the `modules` folder.
 - Step 3: add the following line to the `manifest.py` under `ports/stm32/boards`.
 ```python
@@ -221,10 +221,10 @@ dfu-util -s :mass-erase:force -a 0 -d 0483:df11 -D ff.bin
 
 ### STM32CubeProgrammer
 
-In addtion to that, if you were using `STM32CubeProgrammer` with a GUI, everything should be very straight foward. And this is the most easy way to flash your device imo. There are 3 options available: `ST-Link, UART and USB` each corresponding to using a `st-link`, using a `uart-bridge` and using the built-in `dfu`.
+In addition to that, if you were using `STM32CubeProgrammer` with a GUI, everything should be very straightforward. This is the easiest way to flash your device imo. There are 3 options available: `ST-Link, UART, and USB` each corresponding to using a `st-link`, using a `uart-bridge`, and using the built-in `dfu`.
 
 ### Side note
 
-If you were unlucky and got a clone/pirated board, you might find it difficult to flash the firmware using `dfu`. (`st-link` and `uart-bridge` works just fine.) You can try to connect `A10` to the `GND` pin before you booting the board into dfu. This might solve your issue.
+If you were unlucky and got a clone/pirated board, you might find it difficult to flash the firmware using `dfu`. (`st-link` and `uart-bridge` works just fine.) You can try to connect `A10` to the `GND` pin before you boot the board into dfu. This might solve your issue.
 
 If you know for a fact, that your boards are official, try to heat the board up with a hairdryer and try again. This should solve your problem. 
