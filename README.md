@@ -8,7 +8,7 @@
 
 This port gives you a py-board-like experience using the BlackPill created by WeAct Studio.
 
-There are 2 major versions of the BlackPills, they differ only in terms of crystal speed. A total of 6 versions of Firmware are provided, 3 for the 8MHz crystal version and 3 for the regular 25MHz crystal version. They differ only in the SPI flash size (0MB, 8MB and 16MB). All of them can be found in the `firmware` folder and they come in `.dfu` and `.hex` format. You can also define your own SPI flash size as described in the `How to build` section.
+There are 2 major versions of the BlackPills, they differ only in terms of crystal speed. A total of 6 versions of Firmware are provided, 3 for the 8MHz crystal version and 3 for the regular 25MHz crystal version. They differ only in the SPI flash size (0MB, 8MB and 16MB). All of them can be found in the `firmware` folder and they come in both `.dfu` and `.hex` format. You can also define your own SPI flash size as described in the `How to build` section.
 
 The 8MHz version has the advantage to be more stable in terms of dfu-bootloader connectivity, as it tolerates a bigger margin of errors caused by ambient temperature.
 
@@ -18,7 +18,7 @@ The pins/features-configurations are final, changes will only be done when force
 
 ## Pins definition
 
-Things that in `()` are available in the pre-built firmware but they might interfere with other interfaces, so be caucious. These are only my choices, you may use any other pins, which were sated in the comment as `Valid`. For the 8MB version, the `SPI1` bus is used for SPI flash.
+Things that in `()` are available in the pre-built firmware but they might interfere with other interfaces, so be caucious. These are only my choices, you may use any other pins, which were stated in the comment as `Valid`. For the 8MB version, the `SPI1` bus is used for SPI flash.
 
 | USART  | USART1 | USART2 |(USART6)|
 | ------ | ------ | ------ | ------ |
@@ -43,9 +43,9 @@ Things that in `()` are available in the pre-built firmware but they might inter
 
 ## Lfs2 Support
 
-`Lfs2` is a little fail-safe filesystem designed for microcontrollers that supports dynamic wear leveling, which is quiet useful when you are using the internal flash to log datas, since `FAT` does not have a wear leveling implementation and you will be wearing off your 10K cycles quiet fast.
+`Lfs2` is a little fail-safe filesystem designed for microcontrollers to support dynamic wear leveling, which is quiet useful when you are using the internal flash to log data. Since `FAT` does not have a wear leveling implementation, you will be wearing off your 10K cycles of the leading sectors quiet fast.
 
-To format the filesystem to `Lfs2` you can simply excute the following code:
+To format the filesystem to `Lfs2`, you can simply excute the following code:
 
 ```python
 import os, pyb
@@ -88,8 +88,8 @@ os.chdir('/flash')
 
 ## Storage modification
 
-### Flash layout
-If changing the flash layout is at your interest, you can modify the following section the `stm32f411.ld` file. However, there is this one rule: **never assign a sector of size more than your `FS_CACHE` size for `Flash_FS`.** Otherwise corruption will occur. This is caused by the fact that F4 series has very big sectors and every sector has to be erased before writting data to it. In case the `FS_CACHE` is not big enough to cache the biggest sector, when you are trying to write to the reset part of the sector, the sector itself will be erased but only part of its content was cached, as a result: you lost your uncached data and hence a corruption.
+### Flash layout (Only useful for the internal flash version)
+If changing the flash layout is at your interest, you can modify the following section in the `stm32f411.ld` file. However, there is this one rule: **never assign a sector of size more than your `FS_CACHE` size for `Flash_FS`.** Otherwise corruption will occur. This is caused by the fact that F4 series has very big sectors and every sector has to be erased before writting data to it. In case the `FS_CACHE` is not big enough to cache the biggest sector, when you are trying to write to the reset part of the sector, the sector itself will be erased but only part of its content was cached, as a result: you lost your uncached data and hence a corruption.
 
 The default one is almost optimized for the RAM and flash ratio. The following are 2 suggestions/examples of working modifications:
 
@@ -108,7 +108,7 @@ MEMORY
 }
 ```
 
-Example 2: Maximizing flash size. You are using sector 1, 2, 3 (each has 16K) and 4 (has 64K total) for your filesystem. This is the maximum amount of flash you can get at the cost of 128K firmware size and 64K of ram. This is the max amount, because for the next step you need 128K RAM, and you only have 128K RAM on the stm32f411ce. Also, the firmware is reduced by 128K because when you earse sector 5, the part of the firmware stored on it will also be removed, causing the system to fail.
+Example 2: Maximizing flash size. You are using sector 1, 2, 3 (each has 16K) and 4 (has 64K total) for your filesystem. This is the maximum amount of flash you can get at the cost of reducing maximum firmware size by 128K and 64K of ram. This is the max flash size, because for the next step you need 128K RAM, and you only have 128K RAM on the stm32f411ce. Also, the maximum firmware size is reduced by 128K because when you earse sector 5, the part of the firmware stored on it will also be removed, causing the system to fail.
 ```ld
 MEMORY
 {
@@ -125,14 +125,15 @@ MEMORY
 Note that you have to wipe the whole flash during flashing the firmware for the modifications to take effect.
 
 ### Using external SPI-Flash
-You can either solder a external SPI-Flash directly on the board or connect the first SPI interface (`A4, A5, A6, A7`) to the external SPI-Flash module. Both way you can use the e.g. `8MB` version of firmware directly. Assuming your external SPI-Flash has `8MB` of storage.
+You can either solder a external SPI-Flash directly on the board or connect the first SPI interface (`A4, A5, A6, A7`) to the external SPI-Flash module. Both way you can use a e.g. `8MB` version of firmware directly. Assuming your external SPI-Flash has `8MB` of storage.
 If the SPI-Flash is not wired/soldered correctly, the firmware still boots but you do not have access to the flash storage.
 
 ## How to build
 ### Vanilla
-First of all, you have to have a linux enviroment and get the compilers.
+First of all, you have to have a linux enviroment and get the compilers. On ubuntu 23.10 and above or debian 12 and above, it's called `gcc-arm-none-eabi`. On arch linux, it's called `arm-none-eabi-gcc`.
 ```shell
-sudo apt-get -y install gcc-arm-none-eabi build-essential
+sudo apt-get -y install gcc-arm-none-eabi build-essential # On Ubuntu or Debian
+sudo pacman -S arm-none-eabi-gcc base-devel # On Arch Linux
 ```
 After that, open the terminal and clone the official Micropython repo:
 ```shell
@@ -225,3 +226,5 @@ In addtion to that, if you were using `STM32CubeProgrammer` with a GUI, everythi
 ### Side note
 
 If you were unlucky and got a clone/pirated board, you might find it difficult to flash the firmware using `dfu`. (`st-link` and `uart-bridge` works just fine.) You can try to connect `A10` to the `GND` pin before you booting the board into dfu. This might solve your issue.
+
+If you know for a fact, that your boards are official, try to heat the board up with a hairdryer and try again. This should solve your problem. 
