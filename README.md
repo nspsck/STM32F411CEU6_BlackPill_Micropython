@@ -16,9 +16,13 @@ A BlackPill with SPI flash has roughly 12KB more RAM available. This is due to t
 
 The pins/features-configurations are final, changes will only be done when forced by Micropython updates.
 
+## Update 20.08.2024
+
+A generic TFT-Driver has been included. Details and documentations [here](https://github.com/nspsck/st7735s_WeAct_Studio_TFT_port). Note the blackpills without SPI-Flash version are missing some fonts compared to the SPI-Flash version.
+
 ## Pins definition
 
-Things that in `()` are available in the pre-built firmware but they might interfere with other interfaces, so be cautious. These are only my choices, you may use any other pins, which were stated in the comment as `Valid`. For the 8MB version, the `SPI1` bus is used for SPI flash.
+Things that in `()` are available in the pre-built firmware but they might interfere with other interfaces, so be cautious. These are only my choices, you may use any other pins, which were stated in the comment as `Valid`. For the 8MB version, the `SPI1` bus is used for SPI flash. `SPI4` and `SPI5` are master out only by default, because both the `MISO` pins are used for USB.
 
 | USART  | USART1 | USART2 |(USART6)|
 | ------ | ------ | ------ | ------ |
@@ -34,7 +38,7 @@ Things that in `()` are available in the pre-built firmware but they might inter
 | ------ | ------ | ------ | ------ | ------ | ------ |
 | NSS    | A4     | B12    | A15    | B12    | B1     |
 | SCK    | A5     | B13    | B3     | B13    | B0     |
-| MISO   | A6     | B14    | B4     | A11    | A12    |
+| MISO   | A6     | B14    | B4     | N.A.   | N.A.   |
 | MOSI   | A7     | B15    | B5     | A1     | A10    |
 
 | LED  | KEY | USB_DM | USB_DP | SWDIO | SWCLK |

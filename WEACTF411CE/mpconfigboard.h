@@ -108,12 +108,12 @@ extern struct _spi_bdev_t spi_bdev;
 // #define MICROPY_HW_SPI4_NAME        "SPI4"
 #define MICROPY_HW_SPI4_NSS         (pin_B12) // Valid: PB12
 #define MICROPY_HW_SPI4_SCK         (pin_B13) // Valid: PB13
-#define MICROPY_HW_SPI4_MISO        (pin_A11) // Valid: PA11
+// #define MICROPY_HW_SPI4_MISO        (pin_A11) // Valid: PA11
 #define MICROPY_HW_SPI4_MOSI        (pin_A1) // Valid: PA1
 // #define MICROPY_HW_SPI5_NAME        "SPI5"
 #define MICROPY_HW_SPI5_NSS         (pin_B1) // Valid: PB1
 #define MICROPY_HW_SPI5_SCK         (pin_B0) // Valid: PB0
-#define MICROPY_HW_SPI5_MISO        (pin_A12) // Valid: PA12
+// #define MICROPY_HW_SPI5_MISO        (pin_A12) // Valid: PA12
 #define MICROPY_HW_SPI5_MOSI        (pin_A10) // Valid: PA10, PB8
 
 // USRSW has no pullup or pulldown, and pressing the switch makes the input go low
